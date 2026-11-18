@@ -1,0 +1,359 @@
+/* ---------- 1. THEME COLORS (the "paint chart") ---------- */
+:root {
+    --bg: #f2f4f8;
+    --card: #ffffff;
+    --text: #1f2430;
+    --muted: #666d7a;
+    --border: #e2e5ea;
+    --input-bg: #ffffff;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --link: #4f46e5;
+    --secondary-bg: #e5e7eb;
+    --secondary-hover: #d1d5db;
+    --result-bg: #f8f9fc;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    --loading-bg: #e0e7ff;
+    --loading-text: #3730a3;
+    --success-bg: #dcfce7;
+    --success-text: #166534;
+    --error-bg: #fee2e2;
+    --error-text: #991b1b;
+}
+
+/* Dark mode: same names, different colors */
+[data-theme="dark"] {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --text: #e8eaf0;
+    --muted: #9aa1b0;
+    --border: #2b3040;
+    --input-bg: #12141c;
+    --primary: #6366f1;
+    --primary-hover: #818cf8;
+    --link: #a5b4fc;
+    --secondary-bg: #2b3040;
+    --secondary-hover: #374055;
+    --result-bg: #151822;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+    --loading-bg: #1e1b4b;
+    --loading-text: #c7d2fe;
+    --success-bg: #052e16;
+    --success-text: #86efac;
+    --error-bg: #450a0a;
+    --error-text: #fca5a5;
+}
+
+
+/* ---------- 2. BASIC PAGE ---------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Smooth color change when switching themes */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* The card in the middle of the page */
+.container {
+    position: relative;   /* lets the theme button sit in the corner */
+    background: var(--card);
+    padding: 40px 24px 28px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    transition: background-color 0.3s;
+    animation: fade-up 0.5s ease;
+}
+
+h1 {
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-bottom: 24px;
+}
+
+
+/* ---------- 3. FORM ---------- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input {
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--text);
+    background-color: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Small "press" effect when clicking */
+button:active {
+    transform: scale(0.97);
+}
+
+button:focus-visible {
+    outline: 3px solid var(--primary-hover);
+    outline-offset: 2px;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+button.secondary {
+    background-color: var(--secondary-bg);
+    color: var(--text);
+    padding: 8px 14px;
+    font-size: 14px;
+}
+
+button.secondary:hover {
+    background-color: var(--secondary-hover);
+}
+
+
+/* ---------- 4. THEME TOGGLE BUTTON ---------- */
+.theme-toggle {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 18px;
+    border-radius: 50%;
+    background-color: var(--secondary-bg);
+}
+
+.theme-toggle:hover {
+    background-color: var(--secondary-hover);
+}
+
+
+/* ---------- 5. MESSAGES AND RESULT ---------- */
+.hidden {
+    display: none;
+}
+
+.message {
+    margin-top: 16px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 15px;
+    animation: fade-up 0.3s ease;
+}
+
+.message.loading {
+    background-color: var(--loading-bg);
+    color: var(--loading-text);
+}
+
+/* A small spinning circle before the loading text */
+.message.loading::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: spin 0.7s linear infinite;
+}
+
+.message.success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+}
+
+.message.error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+}
+
+.result {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background-color: var(--result-bg);
+    animation: pop-in 0.35s ease;
+}
+
+.result a {
+    color: var(--link);
+    font-weight: bold;
+    word-break: break-all;
+    text-align: left;
+}
+
+
+/* ---------- 6. HISTORY ---------- */
+.history {
+    margin-top: 28px;
+    text-align: left;
+}
+
+.history h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.history-empty {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+#history-list {
+    list-style: none;
+}
+
+#history-list li {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 8px;
+    animation: fade-up 0.4s ease;
+    transition: background-color 0.2s;
+}
+
+#history-list li:hover {
+    background-color: var(--result-bg);
+}
+
+.history-short {
+    color: var(--link);
+    font-weight: bold;
+    word-break: break-all;
+}
+
+.history-original {
+    font-size: 13px;
+    color: var(--muted);
+    word-break: break-all;
+    margin-top: 2px;
+}
+
+.history-clicks {
+    font-size: 13px;
+    color: var(--success-text);
+    margin-top: 2px;
+}
+
+
+/* ---------- 7. ANIMATIONS ---------- */
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Respect users who ask their device to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+
+/* ---------- 8. RESPONSIVE RULES ---------- */
+
+/* Wider screens: put the input and the button side by side */
+@media (min-width: 560px) {
+    .container {
+        padding: 48px 40px 32px;
+    }
+
+    form {
+        flex-direction: row;
+    }
+
+    input {
+        flex: 1;
+    }
+}
+
+/* Small phones: stack the result box vertically */
+@media (max-width: 420px) {
+    .result {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .result button {
+        width: 100%;
+    }
+}

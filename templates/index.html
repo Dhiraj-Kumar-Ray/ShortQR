@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortQR - URL Shortener</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <!-- Choose the theme before the page is drawn, to avoid a white flash -->
+    <script>
+        (function () {
+            const saved = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const theme = saved || (prefersDark ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
+</head>
+<body>
+    <main class="container">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <h1>ShortQR</h1>
+        <p class="subtitle">Paste a long link and get a short one.</p>
+
+        <!-- CHANGE 1: removed method and action. JavaScript handles the submit now. -->
+        <form id="shorten-form">
+            <input
+                type="text"
+                id="url-input"
+                name="url"
+                placeholder="https://example.com/very/long/link"
+            >
+            <button type="submit" id="shorten-button">Shorten</button>
+        </form>
+
+        <!-- CHANGE 2: a place to show loading, success and error messages -->
+        <p id="message" class="message hidden"></p>
+
+        <!-- CHANGE 3: the result box, hidden until we have a short link -->
+        <div id="result" class="result hidden">
+            <a id="short-link" href="#" target="_blank"></a>
+            <button type="button" id="copy-button" class="secondary">Copy</button>
+        </div>
+
+                <!-- History of recent links, filled in by JavaScript -->
+        <section class="history">
+            <h2>Recent links</h2>
+            <p id="history-empty" class="history-empty">No links yet.</p>
+            <ul id="history-list"></ul>
+        </section>
+
+    </main>
+
+    <!-- CHANGE 4: load our JavaScript at the end of the body -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
